@@ -4,3 +4,7 @@
 /.idea/vcs.xml
 /.idea/msc-crypto-exchange.iml
 /.idea/.gitignore
+/vendor
+/.idea/phpspec.xml
+/.idea/codeception.xml
+/composer.lock
