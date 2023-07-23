@@ -3,6 +3,7 @@
 namespace Msc\MscCryptoExchange\Clients;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Uri;
 use Illuminate\Log\Logger;
 use Msc\MscCryptoExchange\Contracts\DateTimeContract;
 use Msc\MscCryptoExchange\Contracts\Request;
@@ -47,7 +48,7 @@ abstract class RestApiClient extends BaseApiClient implements RestApiClientAlias
     }
 
     protected function sendRequestAsync(
-        UriInterface $uri,
+        Uri $uri,
         string $method,
         \Closure $ct,
         ?array $parameters = null,
@@ -56,17 +57,24 @@ abstract class RestApiClient extends BaseApiClient implements RestApiClientAlias
         ?array $additionalHeaders = null,
         bool $ignoreRatelimit = false
     ): WebCallResult {
-        // TODO: Implement the method.
+        $currentTry = 0;
+
+        while (true) {
+            $currentTry++;
+
+            $request = self::prepareRequestAsync($uri, $method, $ct, $parameters, $signed, $requestWeight,
+                $additionalHeaders, $ignoreRatelimit);
+        }
     }
 
     protected function prepareRequestAsync(
-        UriInterface $uri,
+        Uri $uri,
         string $method,
         \Closure $ct,
         ?array $parameters = null,
         bool $signed = false,
-        string $parameterPosition = null,
-        string $arraySerialization = null,
+//        string $parameterPosition = null,
+//        string $arraySerialization = null,
         int $requestWeight = 1,
         ?array $additionalHeaders = null,
         bool $ignoreRatelimit = false
@@ -79,7 +87,6 @@ abstract class RestApiClient extends BaseApiClient implements RestApiClientAlias
         \Closure $ct,
         bool $expectedEmptyResponse
     ): WebCallResult {
-        // TODO: Implement the method.
     }
 
     protected function constructRequest(

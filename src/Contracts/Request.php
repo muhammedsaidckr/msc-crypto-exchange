@@ -3,6 +3,7 @@
 namespace Msc\MscCryptoExchange\Contracts;
 
 use Illuminate\Http\Client\Response;
+use Psr\Http\Message\RequestInterface;
 
 interface Request
 {

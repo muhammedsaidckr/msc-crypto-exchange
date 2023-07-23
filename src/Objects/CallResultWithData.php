@@ -25,19 +25,31 @@ class CallResultWithData extends CallResult
         return $this->originalData;
     }
 
+    /**
+     * @param $data
+     * @return \Msc\MscCryptoExchange\Objects\CallResult
+     */
+    public function as($data)
+    {
+        return new CallResultWithData($data, $this->originalData, $this->error);
+    }
+
     public function asDataless()
     {
         return new CallResult();
     }
 
-    public function asDatalessError(Error $error)
-    {
-        return new CallResult($error);
-    }
-
     public function asError(Error $error)
     {
         return new CallResultWithData(null, null, $error);
+    }
+
+    /**
+     * @return bool
+     */
+    public function __invoke()
+    {
+        return $this->isSuccess();
     }
 
     public function __toString()
@@ -46,7 +58,7 @@ class CallResultWithData extends CallResult
         if ($this->isSuccess()) {
             return $result;
         } else {
-            return $result . " in " . $this->responseTime;
+            return $result." in ".$this->responseTime;
         }
     }
 }

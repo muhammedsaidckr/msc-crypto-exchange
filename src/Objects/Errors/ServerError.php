@@ -6,8 +6,8 @@ use Msc\MscCryptoExchange\Objects\Error;
 
 class ServerError extends Error
 {
-    public function __construct(int $code, string $message, $data = null)
+    public function __construct(string $message, $data = null)
     {
-        parent::__construct($code, $message, $data);
+        parent::__construct(500, $message, $data);
     }
 }

@@ -2,11 +2,12 @@
 
 namespace Msc\MscCryptoExchange\Objects;
 
-class WebCallResult extends CallResult
+class WebCallResultWithData extends CallResultWithData
 {
     protected $responseStatusCode;
     protected $responseHeaders;
     protected $responseTime;
+    protected $responseLength;
     protected $requestUrl;
     protected $requestBody;
     protected $requestMethod;
@@ -16,16 +17,20 @@ class WebCallResult extends CallResult
         $responseStatusCode = null,
         $responseHeaders = null,
         $responseTime = null,
+        $responseLength = null,
+        $originalData = null,
         $requestUrl = null,
         $requestBody = null,
         $requestMethod = null,
         $requestHeaders = null,
+        $data = null,
         $error = null
     ) {
-        parent::__construct($error);
+        parent::__construct($data, $originalData, $error);
         $this->responseStatusCode = $responseStatusCode;
         $this->responseHeaders = $responseHeaders;
         $this->responseTime = $responseTime;
+        $this->responseLength = $responseLength;
         $this->requestUrl = $requestUrl;
         $this->requestBody = $requestBody;
         $this->requestMethod = $requestMethod;
@@ -45,6 +50,11 @@ class WebCallResult extends CallResult
     public function getResponseTime()
     {
         return $this->responseTime;
+    }
+
+    public function getResponseLength()
+    {
+        return $this->responseLength;
     }
 
     public function getRequestUrl()
@@ -67,16 +77,36 @@ class WebCallResult extends CallResult
         return $this->requestHeaders;
     }
 
-    public function asError(Error $error)
+    public function as($data)
     {
-        return new WebCallResult(
+        return new WebCallResultWithData(
             $this->responseStatusCode,
             $this->responseHeaders,
             $this->responseTime,
+            $this->responseLength,
+            $this->originalData,
             $this->requestUrl,
             $this->requestBody,
             $this->requestMethod,
             $this->requestHeaders,
+            $data,
+            $this->error
+        );
+    }
+
+    public function asError(Error $error)
+    {
+        return new WebCallResultWithData(
+            $this->responseStatusCode,
+            $this->responseHeaders,
+            $this->responseTime,
+            $this->responseLength,
+            $this->originalData,
+            $this->requestUrl,
+            $this->requestBody,
+            $this->requestMethod,
+            $this->requestHeaders,
+            null,
             $error
         );
     }

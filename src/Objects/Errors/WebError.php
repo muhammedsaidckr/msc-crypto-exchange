@@ -6,7 +6,7 @@ use Msc\MscCryptoExchange\Objects\Error;
 
 class WebError extends Error
 {
-    public function __construct(int $code, string $message, $data = null)
+    public function __construct(int|null $code, string $message, $data = null)
     {
         parent::__construct($code, $message, $data);
     }

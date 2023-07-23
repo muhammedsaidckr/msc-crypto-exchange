@@ -2,11 +2,11 @@
 
 namespace Msc\MscCryptoExchange\Requests;
 
-use App\Interfaces\IRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
+use Msc\MscCryptoExchange\Contracts\Request as RequestContract;
 
-class Request implements IRequest
+class Request implements RequestContract
 {
     private $request;
     private $httpClient;
@@ -14,9 +14,7 @@ class Request implements IRequest
 
     public function __construct(string $method, string $uri, int $requestId)
     {
-        $this->request = Http::withHeaders(['RequestId' => $requestId]);
-        $this->request->method($method);
-        $this->request->uri($uri);
+        $this->request = new \GuzzleHttp\Psr7\Request($method, $uri, ['RequestId' => $requestId]);
     }
 
     public function getContent(): ?string
@@ -27,16 +25,6 @@ class Request implements IRequest
     public function accept(string $value): void
     {
         $this->request->accept($value);
-    }
-
-    public function setMethod(string $method): void
-    {
-        $this->request->method($method);
-    }
-
-    public function getUri(): string
-    {
-        return $this->request->uri();
     }
 
     public function getRequestId(): int
