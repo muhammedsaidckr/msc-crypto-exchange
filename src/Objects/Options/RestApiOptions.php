@@ -26,7 +26,11 @@ class RestApiOptions extends ApiOptions
         return $this->rateLimitingBehaviour;
     }
 
-    public function setRateLimitingBehaviour(string $rateLimitingBehaviour)
+    /**
+     * @param  string|null  $rateLimitingBehaviour
+     * @return void
+     */
+    public function setRateLimitingBehaviour(string|null $rateLimitingBehaviour)
     {
         $this->rateLimitingBehaviour = $rateLimitingBehaviour;
     }
@@ -36,7 +40,11 @@ class RestApiOptions extends ApiOptions
         return $this->autoTimestamp;
     }
 
-    public function setAutoTimestamp(bool $autoTimestamp)
+    /**
+     * @param bool|null $autoTimestamp
+     * @return void
+     */
+    public function setAutoTimestamp($autoTimestamp)
     {
         $this->autoTimestamp = $autoTimestamp;
     }

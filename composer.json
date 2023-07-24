@@ -19,7 +19,9 @@
         "php": "^8.1|^8.2",
         "ext-json": "*",
         "guzzlehttp/guzzle": "^7.7",
-        "illuminate/support": "^8.0"
+        "illuminate/support": "^8.0",
+        "moneyphp/money": "^4.1",
+        "spatie/laravel-data": "^2.2"
     },
     "require-dev": {
         "orchestra/testbench": "^6.0",
@@ -29,7 +31,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Msc\\MscCryptoExchange\\": "src",
+            "Msc\\MscCryptoExchange\\": "src"
         }
     },
     "autoload-dev": {

@@ -32,3 +32,4 @@ class TestObjectResult
 class TestObject2
 {
 }
+

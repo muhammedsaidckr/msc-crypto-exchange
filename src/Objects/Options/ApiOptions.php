@@ -14,7 +14,7 @@ class ApiOptions
         return $this->outputOriginalData;
     }
 
-    public function setOutputOriginalData(bool $outputOriginalData)
+    public function setOutputOriginalData($outputOriginalData)
     {
         $this->outputOriginalData = $outputOriginalData;
     }

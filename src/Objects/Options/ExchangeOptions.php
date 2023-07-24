@@ -25,9 +25,9 @@ class ExchangeOptions
     /**
      * The max time a request is allowed to take
      *
-     * @var Carbon
+     *
      */
-    public Carbon $requestTimeout;
+    public $requestTimeout;
 
     /**
      * The api credentials used for signing requests to this API.
@@ -39,11 +39,11 @@ class ExchangeOptions
     /**
      * ExchangeOptions constructor.
      *
-     * @param int $requestTimeoutInSeconds
+     * @param  int  $requestTimeoutInSeconds
      */
     public function __construct(int $requestTimeoutInSeconds = 20)
     {
-        $this->requestTimeout = Carbon::createFromTimestamp($requestTimeoutInSeconds);
+        $this->requestTimeout = 20;
     }
 
     /**
@@ -59,7 +59,7 @@ class ExchangeOptions
     /**
      * Set the proxy settings
      *
-     * @param ApiProxy|null $proxy
+     * @param  ApiProxy|null  $proxy
      * @return void
      */
     public function setProxy(?ApiProxy $proxy): void
@@ -72,7 +72,7 @@ class ExchangeOptions
      *
      * @return Carbon
      */
-    public function getRequestTimeout(): Carbon
+    public function getRequestTimeout()
     {
         return $this->requestTimeout;
     }
@@ -80,7 +80,7 @@ class ExchangeOptions
     /**
      * Set the max time a request is allowed to take
      *
-     * @param int $requestTimeoutInSeconds
+     * @param  int  $requestTimeoutInSeconds
      * @return void
      */
     public function setRequestTimeout(int $requestTimeoutInSeconds): void
@@ -101,7 +101,7 @@ class ExchangeOptions
     /**
      * Set the api credentials used for signing requests to this API
      *
-     * @param ApiCredentials|null $apiCredentials
+     * @param  ApiCredentials|null  $apiCredentials
      * @return void
      */
     public function setApiCredentials(?ApiCredentials $apiCredentials): void

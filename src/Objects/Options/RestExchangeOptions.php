@@ -18,9 +18,15 @@ class RestExchangeOptions extends ExchangeOptions
      * How often the timestamp adjustment between client and server is recalculated.
      * If you need a very small TimeSpan here you're probably better off syncing your server time more often
      *
-     * @var Carbon
+     *
      */
-    public Carbon $timestampRecalculationInterval;
+    public $timestampRecalculationInterval;
+
+    public function __construct(int $requestTimeoutInSeconds = 20)
+    {
+        parent::__construct($requestTimeoutInSeconds);
+        $this->timestampRecalculationInterval = 10;
+    }
 
     /**
      * Create a copy of this options

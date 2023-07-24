@@ -14,7 +14,7 @@ class RequestFactory implements RequestFactoryAlias
 
     public function configure(\DateInterval|Carbon|int $requestTimeout, $httpClient = null): void
     {
-        $this->httpClient = $httpClient ?? Http::timeout($requestTimeout->s);
+        $this->httpClient = $httpClient ?? Http::timeout($requestTimeout);
     }
 
 
