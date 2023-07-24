@@ -5,7 +5,7 @@ namespace Msc\MscCryptoExchange\Authentication;
 use GuzzleHttp\Psr7\Uri;
 use Msc\MscCryptoExchange\Clients\RestApiClient;
 
-class AuthenticationProvider
+abstract class AuthenticationProvider
 {
     protected ApiCredentials $credentials;
     protected $sBytes;
