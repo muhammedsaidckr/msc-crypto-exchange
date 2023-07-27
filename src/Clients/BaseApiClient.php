@@ -73,7 +73,7 @@ abstract class BaseApiClient implements BaseApiClientAlias
         $this->outputOriginalData = $outputOriginalData;
         $this->baseAddress = $baseAddress;
 //        ]);
-        $this->authenticationProvider = self::createAuthenticationProvider($apiCredentials);
+        $this->authenticationProvider = $this->createAuthenticationProvider($apiCredentials);
     }
 
     /**

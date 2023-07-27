@@ -4,16 +4,17 @@ namespace Msc\MscCryptoExchange\Contracts;
 
 use GuzzleHttp\Client;
 use Psr\Http\Message\RequestInterface;
+use Ramsey\Uuid\UuidInterface;
 
 interface RequestFactory
 {
     /**
      * @param  string  $method
      * @param  string  $uri
-     * @param  int  $requestId
+     * @param  \Ramsey\Uuid\UuidInterface  $requestId
      * @return \Psr\Http\Message\RequestInterface
      */
-    public function create(string $method, string $uri, int $requestId): RequestInterface;
+    public function create(string $method, string $uri, UuidInterface $requestId): RequestInterface;
 
     /**
      * @param  int  $requestTimeout

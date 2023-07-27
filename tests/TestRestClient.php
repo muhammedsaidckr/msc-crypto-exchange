@@ -34,6 +34,11 @@ class TestRestClient extends BaseRestClient
         $this->api2Client = new TestRestApi2Client($options);
     }
 
+    public static function create(\Closure $param)
+    {
+        return new TestRestClient($param);
+    }
+
     public function setResponse(string $responseData, RequestInterface $request)
     {
         $expectedBytes = json_decode($responseData);

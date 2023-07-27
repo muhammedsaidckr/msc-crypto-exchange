@@ -7,6 +7,8 @@ use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Facades\Http;
 use Msc\MscCryptoExchange\Contracts\RequestFactory as RequestFactoryAlias;
 use Psr\Http\Message\RequestInterface;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 
 class RequestFactory implements RequestFactoryAlias
 {
@@ -21,15 +23,17 @@ class RequestFactory implements RequestFactoryAlias
     /**
      * @param  string  $method
      * @param  string  $uri
-     * @param  int  $requestId
+     * @param  \Ramsey\Uuid\UuidInterface  $requestId
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function create(string $method, string $uri, int $requestId): RequestInterface
+    public function create(string $method, string $uri, UuidInterface $requestId): RequestInterface
     {
         if (! $this->httpClient) {
             throw new \RuntimeException("Can't create request before configuring HTTP client");
         }
 
-        return new Request($this->httpClient->withHeaders(['RequestId' => $requestId]), $method, $uri);
+        return new Request($method, $uri, [
+            'X-Request-Id' => $requestId->toString(),
+        ]);
     }
 }

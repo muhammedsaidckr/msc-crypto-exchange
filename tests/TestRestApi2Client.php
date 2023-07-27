@@ -2,7 +2,7 @@
 
 namespace Msc\MscCryptoExchange\Tests;
 
-use Illuminate\Log\Logger;
+use Illuminate\Support\Facades\Log;
 use Msc\MscCryptoExchange\Authentication\ApiCredentials;
 use Msc\MscCryptoExchange\Clients\RestApiClient;
 use Msc\MscCryptoExchange\Contracts\DateTimeContract;
@@ -10,14 +10,13 @@ use Msc\MscCryptoExchange\Contracts\RequestFactory;
 use Msc\MscCryptoExchange\Objects\Errors\ServerError;
 use Msc\MscCryptoExchange\Objects\TimeSyncInfo;
 use Nette\NotImplementedException;
-use Psr\Http\Message\RequestFactoryInterface;
 
 class TestRestApi2Client extends RestApiClient
 {
     public function __construct(
         TestClientOptions $options,
     ) {
-        parent::__construct('https://localhost:123', app(Logger::class), null, $options, $options->api2Options);
+        parent::__construct(app()->make(Log::class), $this->httpClient, 'http://localhost:123', $options, $options->api2Options);
 //        $requestFactoryMock = \Mockery::mock(RequestFactoryInterface::class);
 //
 //        $requestFactoryMock->shouldReceive('Create')

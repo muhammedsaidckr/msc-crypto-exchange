@@ -34,7 +34,7 @@ class ExchangeOptions
      *
      * @var ApiCredentials|null
      */
-    public ?ApiCredentials $apiCredentials = null;
+    public ?ApiCredentials $apiCredentials;
 
     /**
      * ExchangeOptions constructor.

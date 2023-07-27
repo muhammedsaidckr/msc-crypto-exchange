@@ -6,7 +6,7 @@ use Money\Money;
 
 class TestObject
 {
-    public function __construct(public string $stringData, public int $intData, public Money $decimalData)
+    public function __construct(public string $stringData, public int $intData, public $decimalData)
     {
     }
 }

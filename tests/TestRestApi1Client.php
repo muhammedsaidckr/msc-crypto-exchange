@@ -2,21 +2,21 @@
 
 namespace Msc\MscCryptoExchange\Tests;
 
-use Illuminate\Log\Logger;
+use Illuminate\Support\Facades\Log;
 use Msc\MscCryptoExchange\Authentication\ApiCredentials;
 use Msc\MscCryptoExchange\Clients\RestApiClient;
 use Msc\MscCryptoExchange\Contracts\DateTimeContract;
 use Msc\MscCryptoExchange\Contracts\RequestFactory;
 use Msc\MscCryptoExchange\Objects\TimeSyncInfo;
 use Nette\NotImplementedException;
-use Psr\Http\Message\RequestFactoryInterface;
 
 class TestRestApi1Client extends RestApiClient
 {
     public function __construct(
         TestClientOptions $options,
     ) {
-        parent::__construct('https://localhost:123', app(Logger::class), null, $options, $options->api1Options);
+        parent::__construct(app()->make(Log::class), $this->httpClient, 'https://localhost:123', $options,
+            $options->api1Options);
 //        $requestFactoryMock = \Mockery::mock(RequestFactoryInterface::class);
 //
 //        $requestFactoryMock->shouldReceive('Create')
@@ -35,7 +35,7 @@ class TestRestApi1Client extends RestApiClient
     public function request()
     {
         return $this->sendRequestAsync(
-            new \GuzzleHttp\Psr7\Uri('https://localhost:123'),
+            new \GuzzleHttp\Psr7\Uri('https://localhost:8033'),
             'GET',
             function () {
             },
