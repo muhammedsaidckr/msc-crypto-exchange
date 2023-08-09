@@ -6,6 +6,7 @@ use GuzzleHttp\Psr7\Uri;
 use Msc\MscCryptoExchange\Authentication\ApiCredentials;
 use Msc\MscCryptoExchange\Authentication\AuthenticationProvider;
 use Msc\MscCryptoExchange\Clients\RestApiClient;
+use Msc\MscCryptoExchange\Objects\Enums\HttpMethodParameterPosition;
 
 class TestAuthProvider extends AuthenticationProvider
 {
@@ -36,6 +37,8 @@ class TestAuthProvider extends AuthenticationProvider
         string $method,
         array $provideParameters,
         bool $auth,
+        array $arraySerialization,
+        HttpMethodParameterPosition $parameterPosition,
         array $uriParameters,
         array $bodyParameters,
         array $headers,

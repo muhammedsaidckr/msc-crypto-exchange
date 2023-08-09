@@ -9,8 +9,10 @@ use Illuminate\Support\Str;
 use Msc\MscCryptoExchange\Contracts\DateTimeContract;
 use Msc\MscCryptoExchange\Contracts\Request;
 use Msc\MscCryptoExchange\Contracts\RestApiClient as RestApiClientAlias;
+use Msc\MscCryptoExchange\Helpers\UriHelper;
 use Msc\MscCryptoExchange\Objects\CallResult;
 use Msc\MscCryptoExchange\Objects\CallResultWithData;
+use Msc\MscCryptoExchange\Objects\Enums\HttpMethodParameterPosition;
 use Msc\MscCryptoExchange\Objects\Errors\NoApiCredentialsError;
 use Msc\MscCryptoExchange\Objects\Errors\ServerError;
 use Msc\MscCryptoExchange\Objects\Options\RestApiOptions;
@@ -19,6 +21,8 @@ use Msc\MscCryptoExchange\Objects\TimeSyncInfo;
 use Msc\MscCryptoExchange\Objects\WebCallResult;
 use Msc\MscCryptoExchange\Objects\WebCallResultWithData;
 use Msc\MscCryptoExchange\Requests\RequestFactory;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\UriInterface;
 
 abstract class RestApiClient extends BaseApiClient implements RestApiClientAlias
 {
@@ -132,47 +136,121 @@ abstract class RestApiClient extends BaseApiClient implements RestApiClientAlias
     ): WebCallResult {
     }
 
+//    /**
+//     * @throws \Exception
+//     */
+//    protected function constructRequest(
+//        Uri $uri,
+//        string $method,
+//        ?array $parameters,
+//        bool $signed,
+//        string $parameterPosition,
+//        int $requestId,
+//        ?array $additionalHeaders
+//    ): Request {
+//        $parameters ??= [];
+//        $uriParameters = [];
+//        $bodyParameters = [];
+//        $headers = [];
+//        $additionalHeaders ??= [];
+//
+////        if ($parameterPosition == 'URI') {
+////            foreach ($parameters as $key => $value) {
+////                $uri = $uri->withQuery($parameters);
+////            }
+////        }
+//
+//        $authenticationProvider = $this->authenticationProvider;
+//        if ($authenticationProvider != null) {
+//            try {
+//                $authenticationProvider->authenticateRequest(
+//                    $this,
+//                    $uri,
+//                    $method,
+//                    $parameters,
+//                    $signed,
+//                    $uriParameters,
+//                    $bodyParameters,
+//                    $headers
+//                );
+//            } catch (\Exception $ex) {
+//                throw new \Exception("Failed to authenticate request, make sure your API credentials are correct", $ex);
+//            }
+//        }
+//    }
+
     /**
-     * @throws \Exception
+     * Creates a request object
+     *
+     * @param UriInterface $uri
+     * @param string $method
+     * @param array|null $parameters
+     * @param bool $signed
+     * @param HttpMethodParameterPosition $parameterPosition
+     * @param array $arraySerialization
+     * @param int $requestId
+     * @param array|null $additionalHeaders
+     * @return RequestInterface
      */
     protected function constructRequest(
-        Uri $uri,
+        UriInterface $uri,
         string $method,
         ?array $parameters,
         bool $signed,
-        string $parameterPosition,
+        HttpMethodParameterPosition $parameterPosition,
+        array $arraySerialization,
         int $requestId,
         ?array $additionalHeaders
-    ): Request {
-        $parameters ??= [];
-        $uriParameters = [];
-        $bodyParameters = [];
+    ): RequestInterface
+    {
+        $parameters = $parameters ?? [];
+        foreach ($parameters as $key => $value) {
+            if ($value instanceof \Closure) {
+                $parameters[$key] = $value();
+            }
+        }
+
+        if ($parameterPosition === HttpMethodParameterPosition::InUri) {
+            foreach ($parameters as $key => $value) {
+                $uri = UriHelper::addQueryParmeter($uri, $key, (string)$value);
+            }
+        }
+
         $headers = [];
-        $additionalHeaders ??= [];
+        $uriParameters = $parameterPosition === HttpMethodParameterPosition::InUri ? $parameters : [];
+        $bodyParameters = $parameterPosition === HttpMethodParameterPosition::InBody ? $parameters : [];
 
-//        if ($parameterPosition == 'URI') {
-//            foreach ($parameters as $key => $value) {
-//                $uri = $uri->withQuery($parameters);
-//            }
-//        }
-
-        $authenticationProvider = $this->authenticationProvider;
-        if ($authenticationProvider != null) {
+        if ($this->authenticationProvider !== null) {
             try {
-                $authenticationProvider->authenticateRequest(
+                $this->authenticationProvider->authenticateRequest(
                     $this,
                     $uri,
                     $method,
                     $parameters,
                     $signed,
+                    $arraySerialization,
+                    $parameterPosition,
                     $uriParameters,
                     $bodyParameters,
                     $headers
                 );
             } catch (\Exception $ex) {
-                throw new \Exception("Failed to authenticate request, make sure your API credentials are correct", $ex);
+                throw new \Exception("Failed to authenticate request, make sure your API credentials are correct", 0,
+                    $ex);
             }
         }
+
+        // Sanity check
+        foreach ($parameters as $key => $value) {
+            if (! array_key_exists($key, $uriParameters) && ! array_key_exists($key, $bodyParameters)) {
+                throw new \Exception("Missing parameter $key after authentication processing. AuthenticationProvider implementation ".
+                    "should return provided parameters in either the uri or body parameters output");
+            }
+        }
+
+        $uri = UriHelper::setParameters($uri, $uriParameters, $arraySerialization);
+
+        $request = $this->requestFactory->createRequest($method, $uri);
     }
 
     protected function validateJson(string $data): WebCallResult

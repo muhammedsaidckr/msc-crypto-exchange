@@ -4,6 +4,7 @@ namespace Msc\MscCryptoExchange\Authentication;
 
 use GuzzleHttp\Psr7\Uri;
 use Msc\MscCryptoExchange\Clients\RestApiClient;
+use Msc\MscCryptoExchange\Objects\Enums\HttpMethodParameterPosition;
 
 abstract class AuthenticationProvider
 {
@@ -26,6 +27,8 @@ abstract class AuthenticationProvider
         string $method,
         array $provideParameters,
         bool $auth,
+        array $arraySerialization,
+        HttpMethodParameterPosition $parameterPosition,
         array $uriParameters,
         array $bodyParameters,
         array $headers,

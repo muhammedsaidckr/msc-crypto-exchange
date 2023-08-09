@@ -20,8 +20,10 @@
         "ext-json": "*",
         "guzzlehttp/guzzle": "^7.7",
         "illuminate/support": "^8.0",
+        "juststeveking/parameterbag": "^2.0",
         "moneyphp/money": "^4.1",
-        "spatie/laravel-data": "^2.2"
+        "spatie/laravel-data": "^2.2",
+        "thecodingmachine/phpstan-safe-rule": "^1.2"
     },
     "require-dev": {
         "orchestra/testbench": "^6.0",
